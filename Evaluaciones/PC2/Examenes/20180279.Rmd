@@ -1,0 +1,47 @@
+---
+title: "PC2"
+author: "Maria Jose Vega"
+date: "18/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+LIBRERIAS
+```{r}
+library(jsonlite)
+library(stringr)
+library(readr)   
+library(htmltab)
+```
+
+
+EJERCICIO 1
+
+```{r}
+library(htmltab) 
+
+linkCIA = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkPath='/html/body/div/div[1]/div/div[1]/section/div[2]/div[2]/article/div/div/div/div[2]/section/table'
+
+dataCIA = htmltab(doc = linkCIA, 
+                which =linkPath)
+```
+
+Respuesta 1: la data tiene 230 observaciones y 2 columnas.
+Respuesta 2: la primera variable es cualitativa y nominal, ya que cada dato es un país.La segunda variable es numérica y continua, ya que representa la edad media de varones y mujeres en diferentes países.
+
+EJERCICIO 2
+
+```{r}
+names(dataCIA)
+dataCIA$var1 = dataCIA$`Promedio`
+dataCIA$var2=str_split(string = dataCIA$var1,
+                         pattern = '',
+                        simplify = T)[,1]
+```
+
+

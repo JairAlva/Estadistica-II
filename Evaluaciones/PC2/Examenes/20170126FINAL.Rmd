@@ -1,0 +1,46 @@
+---
+title: '20170126'
+author: "Isabel Ponce de León"
+date: "18/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. EXTRACCIÓN DE BASE DE DATOS:
+```{r}
+library(htmltab) 
+
+linkCIA_MA = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkPath_MA='//*[@id="fieldListing"]'
+
+
+dataCIA = htmltab(doc = linkCIA_MA, 
+                which =linkPath_MA)
+```
+¿Cuántas observaciones y columnas tiene la base de datos?
+La base de datos cuenta con 230 observaciones y 231 columnas.
+
+¿Qué tipo de variables contiene esta base? Describa la naturaleza de cada una.
+La primera variable es una variable categorica nominal, puesto que corresponde al nombre del país. Después se encuentran las variables numéricas continuas, que corresponden a la edad media de los hombres, mujeres, y el promedio de la población de cada país.
+
+
+2. PROCESAMIENTO DE DATOS:
+```{r}
+names(dataCIA)
+dataCIA$Promedio = dataCIA$`Median age`
+dataCIA$Promedio=str_split(string = dataCIA$Promedio,
+                         pattern = 'years',
+                        simplify = T)[,1]
+dataCIA$Promedio = gsub('total:',"",dataCIA$Promedio) 
+dataCIA$Promedio=as.numeric(dataCIA$Promedio)
+
+summary(dataCIA$Promedio)
+
+```
+
+3. ANÁLISIS:
+¿Cuál es el valor mínimo, máximo y promedio de la variable creada?
+El valor mínimo de la variable creada es 14.80, el valor máximo es de 55.40, y el promedio es de 31.55.

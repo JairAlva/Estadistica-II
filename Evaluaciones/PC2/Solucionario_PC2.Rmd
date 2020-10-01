@@ -1,0 +1,30 @@
+---
+title: "Solucionario_PC2"
+author: "__"
+date: "17 de septiembre de 2020"
+output: html_document
+---
+
+```{r}
+library(htmltab)
+library(stringr) 
+library(readr) 
+
+link = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkpath = '//*[@id="fieldListing"]'
+
+prueba = htmltab(doc = link, which =linkpath)
+
+#Promedio total
+prueba$total = str_split(string = prueba$`Median age`,
+                         pattern = 'yearsmale',
+                        simplify = T)[,1]
+prueba$total = parse_number(prueba$total)
+
+summary(prueba$total)
+
+media =31.55
+maximo = 55.40
+minimo = 14.80
+
+```

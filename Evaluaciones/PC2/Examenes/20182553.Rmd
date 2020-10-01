@@ -1,0 +1,53 @@
+---
+title: "20182553 Sierra Pomar"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+Extraer la tabla con Scraping
+```{r}
+link = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+path = '//*[@id="fieldListing"]'
+
+dataCIA = htmltab(doc = link, which =path)
+```
+¿Cuántas observaciones y columnas tiene la base de datos?
+```{r}
+ncol(dataCIA)
+nrow(dataCIA)
+```
+Tiene 2 columnas y 230 observaciones/filas
+¿Qué tipo de variables contiene esta base?
+```{r}
+names(dataCIA)
+str(dataCIA$Country) #variable categórica
+str(dataCIA$`Median age`) #sale como categórica pero contiene información numérica que debe limpiarse
+```
+Cree una columna con el promedio de edad total (el primer número de la columna "Median age"). El nombre de la columna debe ser “Promedio”
+```{r}
+dataCIA$duplicado=dataCIA$`Median age`
+dataCIA$Promedio = str_split(string = dataCIA$duplicado,
+                         pattern = ' ',
+                        simplify = T)[,1]
+```
+Convierta esta columna a una variable numérica.
+```{r}
+dataCIA$Promedio = parse_number(dataCIA$Promedio)
+```
+¿Cuál es el valor mínimo, máximo y promedio de la variable creada?
+```{r}
+summary(dataCIA$Promedio)
+```
+El valor mínimo es 14.8, el valor máximo es 55.4 y el promedio  es 31.55. 
+
+*Si es que no se desea ver el duplicado:
+```{r}
+dataCIA$duplicado=NULL
+```
+

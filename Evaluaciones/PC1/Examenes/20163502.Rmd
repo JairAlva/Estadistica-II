@@ -1,0 +1,34 @@
+---
+title: "PC1- Salcedo, Roy"
+author: '20163502'
+date: "11/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## EJERCICIO 1
+
+library(rio)
+
+link = "https://github.com/schrodingercase/practicaest2/raw/master/Base1.xlsx"
+
+base = import(link)
+base
+
+Respuesta: la data extraída presenta 6 variables y 195 observaciones
+
+## EJERCICIO 2
+
+install.packages("htmltab")
+library(htmltab)
+
+linkweb="https://en.wikipedia.org/wiki/Index_of_Economic_Freedom"
+linkpath="/html/body/div[3]/div[3]/div[5]/div[1]/table[4]"
+
+tabla = htmltab(doc =linkweb, which =linkpath)
+tabla
+
+Respuesta: la data extraida presenta 15 variables y 39 observaciones

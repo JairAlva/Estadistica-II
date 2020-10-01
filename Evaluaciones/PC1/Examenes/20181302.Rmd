@@ -1,0 +1,45 @@
+---
+title: "20181302 - PC1"
+author: "Arianna Zavala"
+date: "9/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Ejercicio 1: Carga de datos
+
+Pregunta: ¿Cuántas variables y observaciones tiene la data extraída?
+
+```{r cars}
+library(rio)
+link = "https://github.com/schrodingercase/practicaest2/raw/master/Base1.xlsx"
+recuperados = import(link)
+
+```
+
+Respuesta: Hay 6 variables y 195 observaciones
+
+
+#Ejercicio 2: Scrapping
+
+Necesitamos conocer algunos detalles del “Index of Economic Freedom”. En específico, es necesario extraer la tabla denominada “Historical Index” (2008-1995).
+
+Pregunta: ¿Cuántas variables y observaciones tiene la data extraida?
+
+Respuesta: Hay 15 variables y 39 observaciones
+
+```{r}
+
+library(htmltab)
+
+link_pagina= "https://en.wikipedia.org/wiki/Index_of_Economic_Freedom"
+linkpath= "/html/body/div[3]/div[3]/div[5]/div[1]/table[4]"
+
+tabla_ej2 = htmltab(doc =link_pagina, which = linkpath)
+tabla_ej2
+
+```
+

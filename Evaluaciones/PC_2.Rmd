@@ -1,0 +1,29 @@
+---
+title: "Practica calificada 2"
+output: html_notebook
+---
+
+Ejercicio
+
+En el siguiente link (https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html) tienes el promedio de edad por cada pais.
+
+Pasos a seguir:
+1. scrapea la tabla (10 puntos)
+2. crea una columna con el promedio de edad total (el primer numero de la columna "Median age") (8 puntos)
+3. Muestra el promedio de la columna creada (2 puntos)
+```{r}
+link = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkpath = '//*[@id="fieldListing"]'
+
+prueba = htmltab(doc = link, which =linkpath)
+
+#Promedio total
+prueba$total = str_split(string = prueba$`Median age`,
+                         pattern = 'yearsmale',
+                        simplify = T)[,1]
+prueba$total = parse_number(prueba$total)
+
+
+mean(prueba$total)
+```
+

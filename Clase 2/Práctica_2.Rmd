@@ -1,0 +1,274 @@
+---
+title: "Clase practica 2 - API y Limpieza de datos"
+output: html_notebook
+---
+Librerias
+
+```{r}
+library(jsonlite) #para extraer datos del API
+library(stringr) #para limpieza de columnas (extracción de numeros, particiones)
+library(readr)   #para extraer un único numero de la columna
+library(htmltab) #para scraping
+```
+
+Primera parte - API (40 minutos)
+
+Los API permiten construir pedidos de datos a través de una dirección web. Para que el trabajo de colección de datos sea exitoso, necesitamos revisar la documentación API de la página de interes.
+
+##EJERCICIO 1 - Ordenes de bienes en San Isidro
+
+Dirección web: http://www.msi.gob.pe/portal/
+
+El API de la Municipalidad de San Isidro indica que el pedido de información necesita dos elementos:
+1. Un contraseña personal (API key)
+2. Una solicitud básica (request)
+
+llave=W1dJl8FYPOlhejAfYrg9Am7zbMEFYsRBZ0IgsZtC
+
+La documentación API sugiere que para visualizar datos podemos usar
+```{r}
+ordenesSI = fromJSON("http://api.datosabiertos.msi.gob.pe/api/v2/datastreams/ORDEN-DE-BIENE-SERVI-2020/data.json/?auth_key=W1dJl8FYPOlhejAfYrg9Am7zbMEFYsRBZ0IgsZtC")
+
+ordenesSI <- ordenesSI[["result"]][["fArray"]]
+
+#cambiando el formato
+ordenesSI2 = fromJSON("http://api.datosabiertos.msi.gob.pe/api/v2/datastreams/ORDEN-DE-BIENE-SERVI-2020/data.pjson/?auth_key=W1dJl8FYPOlhejAfYrg9Am7zbMEFYsRBZ0IgsZtC")
+
+ordenesSI2 <- ordenesSI2[["result"]]
+
+#duplico el data frame para no alterar el original
+data = ordenesSI2
+
+names(data1)
+```
+Ahora queremos saber cuantas columnas o variables tiene mi data.frame
+```{r}
+ncol(data) #columnas
+```
+
+Lo mismo con la cantidad de filas o casos que tiene la data
+```{r}
+nrow(data) #filas
+```
+Por último nos interesa hacer un histograma de los gastos en los que han incurrido la Municipalidad de San Isidro durante el 2020
+```{r}
+hist(data$`Monto-de-la-Orden`)
+
+#Nos damos cuenta que hay que limpiar la base de datos
+#primero eliminamos la última fila que está en blanco
+data = data[-1000, ]
+
+data$`Monto-de-la-Orden` = as.numeric(data$`Monto-de-la-Orden`) #este codigo genera problemas porque el numero tiene "," que separa los miles. Entonces tenemos que usar otros métodos para limpiar la columna
+
+data$Monto2 = parse_number(data$`Monto-de-la-Orden`)
+
+#otra opción
+data$Monto3 = gsub(",", "", data$`Monto-de-la-Orden`)
+data$Monto3 = as.numeric(data$Monto3)
+#Ya estamos más que listos
+hist(data$Monto2)
+```
+
+
+##Ejercicio 2 - Candidatos
+
+Vamos a ver el Federal Election Comision de Estados Unidos
+
+Web: https://api.open.fec.gov/developers/
+
+millave = V0REXgLBkKffVgEPId60k0FHHrgXanFDwpXfDQWm
+```{r}
+FEC = fromJSON("https://api.open.fec.gov/v1/candidates/totals/?api_key=V0REXgLBkKffVgEPId60k0FHHrgXanFDwpXfDQWm")
+
+str(FEC)
+
+candidatos = FEC[["results"]]
+
+candidatos$nombre = str_split(string = candidatos$name,
+          pattern = ', ', simplify = T)[,2]
+
+candidatos$apellido = str_split(string = candidatos$name,
+          pattern = ', ', simplify = T)[,1]
+
+table(candidatos$party_full)
+```
+
+Trabajaremos con la [página de la CIA](https://www.cia.gov/library/publications/resources/the-world-factbook/docs/rankorderguide.html) en la cual figuran varias tablas de países con distintos indicadores. 
+
+## Ejercicio 3: PBI
+
+Bajar la información de [este link](https://www.cia.gov/library/publications/resources/the-world-factbook/fields/211rank.html)
+
+Bajamos la data:
+
+```{r}
+
+web1 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/211rank.html"
+path1 = '//*[@id="rankOrder"]'
+
+data1 = htmltab(doc = web1, which =path1)
+```
+
+Vemos que la variable de nuestro interés está "sucia" pues tiene el símbolo "$" y ",".
+
+Entonces le decimos al programa que reemplace ambos caractéres por "" (nada):
+
+```{r}
+names(data1)
+data1$var1 = data1$'GDP - per capita (PPP)'
+data1[1,5]
+data1$var1 = parse_number(data1$var1)
+head(data1)
+```
+
+
+## Ejercicio 4
+
+[Link](https://www.cia.gov/library/publications/resources/the-world-factbook/fields/239rank.html)
+
+```{r}
+web2 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/239rank.html"
+path2 = '//*[@id="rankOrder"]'
+
+data2 = htmltab(doc = web2, which =path2)
+head(data2)
+```
+
+Vemos que la variable de nuestro interés está "sucia" pues tiene el símbolo "$" y ",".
+
+Entonces le decimos al programa que reemplace ambos caractéres por "" (nada):
+
+```{r}
+names(data2)
+data2[1,5] #Con esto podemos ver el primer elemento de ese vector para darle una revisión
+data2$var1 = parse_number(data2$Exports)
+head(data2$var1)
+```
+
+Luego lo convertimos a numérico y cambiamos de escala (en millones)
+
+```{r}
+data2$var1 = data2$var1/1000000
+names(data2)[names(data2)=='var1']='ExportacionesMillones'
+```
+
+
+## Ejercicio 5
+
+En el siguiente link tenemos una [tabla sobre emisiones de dióxido de carbono](https://www.cia.gov/library/publications/resources/the-world-factbook/fields/274.html)
+
+Obtenemos la base de datos utilizando el *scrapping web*:
+
+```{r}
+library(htmltab)
+web3 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/274.html"
+path3 = '//*[@id="fieldListing"]'
+data3 = htmltab(doc = web3, which =path3)
+```
+
+
+Ahora vemos rápidamente la base obtenida para ver si está "limpia o sucia":
+
+```{r}
+head(data3)
+```
+
+Vemos más de cerca el primer elemento del segundo vector (segunda columna):
+
+
+```{r}
+data3[1,2]
+```
+
+Identificamos el patrón: hay algunos números (también expresados con palabras) que luego son seguidos por Mt (año est.)
+
+Creamos la var1 que será nuestra variables base.
+Eliminamos la anterior. 
+Creamos la variable 2, la cual será la primera parte de esta variable, dividida por el término "Mt".
+
+```{r}
+names(data3)
+data3$var1 = data3$`Carbon dioxide emissions from consumption of energy`
+data3$var2=str_split(string = data3$var1,
+                         pattern = 'Mt',
+                        simplify = T)[,1]
+```
+
+Vemos los primeros elemento de este nuevo vector:
+
+```{r}
+head(data3)[,3]
+```
+
+Una vez que hemos dividido la celda nos damos cuenta que algunas están en miles, otras en millones (con la palabra "million") y otras en billones (con la palabra "billion"). Esto es un problema
+
+Por ello, debemos **reemplazar** estas palabras (million, billion) por números para poder convertir estas variables en **numéricas**. 
+
+Entonces, nuevamente dividimos esa variable (var2) y el caracter de separación será el " ". 
+
+Crearemos el vector "número" que será el número base y el "mult" que será el multiplicador. 
+
+```{r}
+data3$numero=str_split(string = data3$var2,
+                         pattern = ' ',
+                         simplify = T)[,1]
+data3$mult=str_split(string = data3$var2,
+                         pattern = ' ',
+                         simplify = T)[,2]
+table(data3$mult)
+
+```
+
+Una vez que creamos dichos vectores los visualizamos.
+
+```{r}
+head(data3$numero)
+head(data3$mult)
+```
+
+Ahora veamos la columna "mult" y comencemos a reemplazar.
+
+La palabra "million" por 1000000:
+
+```{r}
+data3$mult = gsub('million',"1000000",data3$mult) # reemplaza la palabra million por el número correspondiente.
+```
+
+La palabra "billion" por 1000000000:
+
+```{r}
+data3$mult = gsub('billion',"1000000000",data3$mult) # reemplaza la palabra billion por el número correspondiente.
+```
+
+Los espacios vacíos por 1 (para que el resultado sea el mismo). 
+
+```{r}
+data3$mult[data3$mult == ""] <- "1" # reemplaza los espacios vacíos por el número 1.
+```
+
+Ahora en el vector del número base hay que reemplazar las "," por "":
+
+```{r}
+data3$numero = parse_number(data3$numero) # extraemos el numero sin ","
+```
+
+Ahora volvemos el multiplicador en numéricos:
+
+```{r}
+data3$mult = as.numeric(data3$mult)
+```
+
+Finalmente calculamos una nueva variable que sea la multiplicación entre el número base y el multiplicador (1, millón o billón)
+
+```{r}
+data3$final = (data3$numero*data3$mult)
+data3$final = (data3$final/1000000000)
+```
+
+Finalmente ya tenemos nuestra variable expresada en billones. 
+
+```{r}
+hist(data3$final)
+```
+
+

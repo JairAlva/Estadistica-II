@@ -1,0 +1,67 @@
+---
+title: "Clase practica 1"
+author: "Jair Alva"
+date: "11/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Vamos a hacer el primer ejercicio de estadística básica.
+
+VECTORES
+
+```{r}
+
+nombre=c("Marcela", "Miguel", "Diana", "Mayte", "Hans", "Piero", "Katherine", "Alejandra", "Naomi")
+edad=c("33",NA,"21","19","18","22","23","25",NA)
+ciudad=c("Lima", "Lima", "Cajamarca", "Huancayo", "Trujillo", "Cusco", "Lima", "Cusco", "Cajamarca")
+nota_PC1= c(18,16,15,12,14,NA,19,10,NA)
+
+grupo1=data.frame(nombre, edad, ciudad, nota_PC1, stringsAsFactors = F) 
+
+
+table(grupo1$ciudad)
+```
+
+De pronto, otro JP brinda las notas de sus alumnos
+
+```{r}
+nombre_alumno=c("Marcela", "Miguel", "Diana", "Mayte", "Hans", "Piero", "Katherine", "Alejandra", "Naomi") 
+nota_PC2=c(14,17,18,13,15,16,17,11,20) #Data Frame como una "lista" de vectores 
+grupo2=data.frame(nombre_alumno, nota_PC2, stringsAsFactors = F)
+ 
+
+alumnos_total = merge(grupo1, grupo2, by.x = "nombre" , by.y = "nombre_alumno")
+
+```
+Vamos a jalar información de la web
+
+```{r}
+library(rio)
+link = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/archived_data/archived_time_series/time_series_2019-ncov-Recovered.csv"
+
+recuperados = import(link)
+
+hist(recuperados$`2/6/20 14:20`)
+
+length(recuperados)
+names(recuperados)
+```
+
+Ahora nos interesa copiar tablas de la web
+
+```{r}
+library(htmltab)
+linkpagina="https://en.wikipedia.org/wiki/World_Happiness_Report"
+linkpathtabla = "/html/body/div[3]/div[3]/div[5]/div[1]/table"
+
+tabla1 = htmltab(doc =linkpagina, which =linkpathtabla)
+tabla1
+
+```
+

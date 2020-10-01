@@ -1,0 +1,19 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Este proyecto está hecho para evaluar la aprobación del gobierno en algunos paises de America Latina durante la pandemia
+
+```{r}
+library(rio)
+
+prueba = import("C:/Users/Jair Alva/Desktop/Proyectos/Estadistica-II/Data/prueba.xlsx")
+
+table(prueba$pais)
+```
+Demás nos intersa saber el promedio de aprobación al gobierno
+
+```{r}
+summary(prueba$confianzag)
+```
+

@@ -1,0 +1,241 @@
+####LIMPIEZA DE DATA
+
+Carga de data
+
+```{r}
+install.packages("htmltab")
+library(htmltab)
+
+url1 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/211rank.html" 
+
+gdp = htmltab(doc = url1, 
+               which ='//*[@id="rankOrder"]', #herramientas de desarrollador
+               encoding = "UTF-8") 
+```
+
+Revisamos. Sugieran alternativas:
+
+```{r}
+names(gdp)
+str(gdp)
+```
+Solo necesitamos Country y GDP
+
+```{r}
+gdp = gdp[,c(2,3)]
+names(gdp) = c("Pais", "PBI")
+summary(gdp)
+```
+
+Limpiamos la variable PBI
+
+```{r}
+gdp$PBI2 =   gsub("\\$\\,", "", gdp$PBI) #| es "o" 
+
+head(gdp$PBI,20) #Resultado
+```
+
+Convertimos a variable numérica
+
+```{r}
+gdp$PBI = as.numeric(gdp$PBI)
+str(gdp)
+summary(gdp)
+```
+
+Ahora vamos a abrir una segunda data
+
+```{r}
+url2 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/349.html"
+
+urban = htmltab(doc = url2, 
+                which ='//*[@id="fieldListing"]', #herramientas de desarrollador
+                encoding = "UTF-8")
+```
+
+Revisamos
+
+```{r}
+str(urban)
+head(urban)
+names(urban)
+```
+
+Cambiando nombres
+
+```{r}
+names(urban) = c("Pais", "Urbano")
+names(urban)
+head(urban)
+
+#Separamos las columnas
+library(tidyr)
+urban=separate(urban,Urbano,into=c("Urbano",'delete'), " of total population")
+#se ha separado dicha variable en dos columnas tomando como criterio la palabra entre comillas
+head(urban$Urbano)
+```
+
+Seguimos limpiando
+
+```{r}
+#Como no nos interesa saber cuál fue el cambio que hubo con años anteriores, eliminamos la variable DELETE
+urban$delete=NULL
+str(urban)
+head(urban)
+
+#seguimos separando la variable urbano
+urban=separate(urban,Urbano,into=c("delete",'Urbano'), ":")#separamos 
+head(urban)
+urban$delete=NULL #borramos delete
+
+head(urban) #resultado
+```
+
+Eliminando el porcentaje %
+
+```{r}
+urban$Urbano =gsub("\\%", "", urban$Urbano) #Eliminar caracteres especiales
+
+head(urban$Urbano,10) #resultado
+```
+
+Convertimos a numérica
+
+```{r}
+urban$Urbano=as.numeric(urban$Urbano) 
+summary(urban) #analizar resultados
+```
+
+AHora vamos a traer una tercera base de datos
+
+```{r}
+url3 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/274.html"
+
+cdio = htmltab(doc = url3, 
+               which ='//*[@id="fieldListing"]', #herramientas de desarrollador
+               encoding = "UTF-8")
+```
+
+Revisando la tercera data
+```{r}
+names(cdio)
+str(cdio)
+head(cdio)
+```
+
+Cambiando nombres
+
+```{r}
+names(cdio)
+names(cdio) = c("Pais", "co2")
+names(cdio)
+```
+
+Separando la columna en tres espacios:
+
+```{r}
+head(cdio)
+cdio$var1 = cdio$`co2`
+cdio$var2=str_split(string = cdio$var1,
+                         pattern = 'Mt',
+                        simplify = T)[,1]
+
+cdio$numero=str_split(string = cdio$var2,
+                         pattern = ' ',
+                         simplify = T)[,1]
+
+cdio$mult=str_split(string = cdio$var2,
+                         pattern = ' ',
+                         simplify = T)[,2]
+
+table(cdio$mult)
+
+cdio$mult = gsub('million',10^6,cdio$mult) # reemplaza la palabra million por el número correspondiente.
+
+cdio$mult = gsub('billion',10^9,cdio$mult) # reemplaza la palabra billion por el número correspondiente.
+
+cdio$mult[cdio$mult == ""] <- 1 # reemplaza los espacios vacíos por el número 1.
+
+library(readr)
+cdio$numero = parse_number(cdio$numero) # extraemos el numero sin ","
+
+cdio$mult = as.numeric(cdio$mult)
+
+cdio$final = (cdio$numero*cdio$mult)
+cdio$final = (cdio$final/10^6)
+
+cdio=cdio[,-c(2:6)]
+
+####################################################
+
+```
+
+###MERGE: 
+###sE VA FUSIONANDO BASE POR BASE: Juntando bases de datos (urban y gdp)
+
+```{r}
+names(urban)
+names(gdp)
+#entonces le pedimos que nos fusione las datas en base a la variable común: país
+total1=merge(urban,gdp,by.x='Pais', by.y='Pais') 
+head(total1)
+```
+
+Manera alternativa de fusionar:
+```{r}
+total2=merge(urban,gdp,all.x=T,all.y=T) #nos aseguramos de incluir todos nuestros casos
+#esto signfica que estamos pidiendo que "todos los valores de X sean incluidos" y también "todos los valores de y". Presupone que la primera columna será la columna guía
+head(total2)
+```
+
+
+Chequeamos que no tengamos valores duplicados
+
+```{r}
+total1[duplicated(total1$Pais),]
+#verifica si en la columna país hay duplicados.
+```
+
+Filas incompletas
+
+```{r}
+total1[!complete.cases(total1),] #para verificar si hay casos en una base de datos que no hay en la otra
+```
+
+Ahora pasamos a fusionar con la tercera base: cdio
+
+```{r}
+total=merge(total1,cdio,all.x=T,all.y=T)
+
+head(total)
+```
+
+Revisando casos duplicados e incompletos
+
+```{r}
+total[duplicated(total$Pais),]
+total[!complete.cases(total),]
+```
+
+Buscando casos que no deben estar incluidos
+
+```{r}
+?grep
+total[grep("World|Euro",total$Pais),]
+```
+
+Eliminando esos datos
+
+```{r}
+total=total[-grep("World|Euro",total$Pais),]
+```
+
+Viendo la data fusionada final
+```{r}
+head(total)
+str(total)
+```
+
+
+
+

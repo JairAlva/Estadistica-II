@@ -1,0 +1,101 @@
+---
+title: "20181302_PC2"
+author: "Arianna Zavala"
+date: "9/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## PC2
+
+### EJERCICIO 1
+
+
+```{r}
+
+library(htmltab) 
+
+linkCIA = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkPath='//*[@id="fieldListing"]'
+
+dataCIA = htmltab(doc = linkCIA, 
+                which =linkPath)
+
+head(dataCIA)
+str(dataCIA)
+```
+
+Pregunta 1: 
+
+¿Cuántas observaciones y columnas tiene la base de datos?
+
+Hay 230 observaciones y 2 columnas
+
+¿Qué tipo de variables contiene esta base de datos?
+
+Contiene 2 tipos de variables. Por un lado, las cualitativas nominales (nombre de los países). Por otro lado, una variable cuantitativa, el promedio de edad por país.
+
+
+## EJERCICIO 2
+
+```{r}
+
+dataCIA$edad1=str_split(string = dataCIA$`Median age`,
+                         pattern = 'yearsmale',
+                         simplify = T)[,1]
+
+```
+
+
+```{r}
+#columna 2 
+dataCIA$edad2=str_split(string = dataCIA$edad1,
+                         pattern = 'total:',
+                         simplify = T)[,2]
+
+```
+
+```{r}
+
+dataCIA$Promedio = str_split(string = dataCIA$edad2,
+                         pattern = ' ',
+                         simplify = T)[,1]
+
+dataCIA$Promedio = as.numeric(dataCIA$Promedio)
+
+
+
+```
+
+```{r}
+dataCIA[,c(2,3,4)]=NULL
+
+str(dataCIA)
+
+```
+
+
+Limipio!
+
+## EJERCICIO 3
+
+```{r}
+library(DescTools)
+
+summary(promedio_edad$Promedio)
+```
+
+¿Cuál es el valor mínimo, máximo y promedio de la variable creada?
+
+El valor minimo de la cariable creada es de 14.8 años, el valor máximo es de 55.40 años y el promedio es de 31.40 años
+
+
+
+
+
+### FIN
+
+

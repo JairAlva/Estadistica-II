@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+1.	Extracción de base de datos (10 ptos)
+Extraiga la tabla del siguiente link “Promedio de edad por cada país”:
+```{r}
+library(htmltab)
+#Llamar al link
+l = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+#Llamar al Path
+p = '//*[@id="fieldListing"]'
+
+dataCIA=htmltab(l,p)
+
+```
+¿Cuántas observaciones y columnas tiene la base de datos?
+```{r}
+nrow(dataCIA)
+ncol(dataCIA)
+```
+La data presenta 230 observaciones y dos variables (columnas)
+¿Qué tipo de variables contiene esta base? Describa la naturaleza de cada una.
+Al ser el promedio de edad en los diferentes paises se trata de una variable cuantitativa ya que expresan una cantidad o cantidad de magnitud y por tanto toma valores numéricos, y en este caso seria continua al tratarse de promedios. 
+
+2.2.	Preprocesamiento (8 ptos)
+Cree una columna con el promedio de edad total (el primer número de la columna "Median age"). El nombre de la columna debe ser “Promedio”,
+```{r}
+library(jsonlite) #para extraer datos del API
+library(stringr) #para limpieza de columnas (extracción de numeros, particiones)
+library(readr)   #para extraer un único numero de la columna
+library(htmltab) #para scraping
+dataCIA$Promedio= parse_number(dataCIA$`Median age`)
+```
+
+Convierta esta columna a una variable numérica.
+```{r}
+dataCIA$Promedio=as.numeric(dataCIA$Promedio)
+summary(dataCIA$Promedio)
+```
+Valor minimo = 14.8
+Valor maximo = 55.4
+Promedio = 31.6
+
+
+
+
+
+
+

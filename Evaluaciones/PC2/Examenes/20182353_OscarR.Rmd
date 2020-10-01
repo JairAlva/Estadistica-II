@@ -1,0 +1,91 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+#PRÁCTICA 2: 
+
+1.- EXTRACCIÓN DE BASE DE DATOS:
+
+```{r}
+library(htmltab)
+
+link1="https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+
+link1Path='//*[@id="fieldListing"]'
+
+dataCIA = htmltab(doc = link1,
+                 which = link1Path)
+```
+```{r}
+names(dataCIA)
+```
+
+¿Cuántas observaciones y columnas tiene la base de datos?
+#En la ventana Enviroment, se observa 230 observaciones y 2 variables
+
+¿Qué tipo de variables contiene esta base? Describa la naturaleza de cada una.
+#Cuando observamos la data, observamos que registra dos tipos de variables: "COUNTRY" [variable nominal], y "MEDIAN AGE" [variable numeral]
+La variable COUNTRY registra todos los países según la data que se encuentra cargada en la web de la CIA.
+Con respecto a la variable de MEDIAN AGE, observamos cuatro valores que estructuran la distribución poblacional de los países, de acuerdo a la edad media entre jovenes y adultos, por genero: la edad media de hombres, la edad media de mujeres, edad media de los ciudadanos, año de registro
+
+
+```{r}
+#limpiando la data:
+gsub(" ","",names(dataCIA))
+
+names(dataCIA)=gsub(" ","",names(dataCIA))
+
+```
+
+```{r}
+
+# antes de parentesis para eliminar el año de registro de la data
+
+str_split(string = dataCIA$Medianage,
+          pattern = '\\(',
+          simplify = T)[,1]
+
+```
+
+```{r}
+
+str_split(string = dataCIA$Medianage,
+          pattern = '\\(',
+          simplify = T)[,1]
+
+```
+
+```{r}
+
+#Creando la columna Promedio:
+dataCIA$Promedio=str_split(string = dataCIA$Medianage,
+          pattern = ' ',
+          simplify = T)[,1]
+
+#procedo a limpiar la columna de Promedio
+
+dataCIA$Promedio = gsub("total:", "", dataCIA$`Promedio`)
+
+dataCIA$Promedio = as.numeric(dataCIA$Promedio)
+
+hist(dataCIA$Promedio)
+
+```
+
+#CUÁLES SON: MÍNIMO, MÁXIMO y MEDIA:
+
+```{r}
+min(dataCIA$Promedio)
+```
+
+```{r}
+max(dataCIA$Promedio)
+```
+```{r}
+median(dataCIA$Promedio)
+```
+
+#TERMINADO
+

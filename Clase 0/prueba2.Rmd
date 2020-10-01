@@ -1,0 +1,27 @@
+---
+title: "Aprobación AL"
+author: "Jair Alva"
+date: "4/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Seguimos con el trabajo de analisis de las opiniones en AL
+
+```{r}
+library(rio)
+
+prueba = import("C:/Users/Jair Alva/Desktop/Proyectos/Estadistica-II/Data/prueba.xlsx")
+```
+
+Nos intera en prmera instancia saber la distribución de opiniones
+
+```{r}
+hist(prueba$confianzag)
+```
+

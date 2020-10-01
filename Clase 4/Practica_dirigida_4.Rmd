@@ -1,0 +1,144 @@
+---
+title: "Sesion 4 - Jair Alva"
+output: html_notebook
+---
+CONGLOMERADOS - MÉTODO PARTICIONANTE
+
+PAQUETES
+```{r}
+library(rio)
+library(cluster)
+library(plyr) # para funcion "each"
+library(psych) #para hacer tablas comparadas
+library(knitr) #para generar tablas html
+library(kableExtra) #para generar tablas html
+library(factoextra) #visualización de clusters
+library(ggrepel) #para que las etiquetas de los graficos no se superpongan
+library(htmltab)
+library(dplyr)
+```
+Nos piden que agrupemos a los distritos del Perú en función de su sistema político. Para eso, nos valeremos de algunos indicadores como:
+NEP:                    Número efectivo de partidos
+NP:                     Número de partidos
+Hiperfraccionamiento:   Indicador de hiperfraccionamiento
+Volatilidad total:      Indicador de volatilidad electoral
+Concentracción:         Indicador de concentración
+Herfindal Hirschman:    Indicador de concentración de Herfindal-hirchman
+Competitividad:         Indicador de competitividad
+
+```{r}
+sispol <- read_excel("Clase 4/ERM2010_ISP_Distrital.xlsx")
+str(sispol)
+summary(sispol)
+```
+
+Calculamos la distancia entre cada unidad de análisis
+```{r}
+dist = daisy(sispol[,c(5:11)], metric = "gower")
+
+```
+
+Proponemos una cantidad "n" de grupos a formar
+```{r}
+grupos = pam(dist, 4, cluster.only = T)
+grupos
+
+sispol$clusterP = grupos
+```
+
+Podemos explorar los resultados
+```{r}
+aggregate(as.matrix(cbind(sispol[,c(5:11)]))~ clusterP, data=sispol,
+          FUN=plyr::each(MD = median, Media = mean))
+
+#Opcional, para recordar las clases de Estadísitca I
+describeBy(as.matrix(cbind(sispol[,c(5:11)])), group=sispol$clusterP, digits = 2)
+
+#Guardamos la visualización en un data.frame
+tabla = aggregate(as.matrix(cbind(sispol[,c(5:11)]))~ clusterP, data=sispol,
+          FUN=plyr::each(MD = median, Media = mean))
+
+tabla = t(as.data.frame(tabla))
+tabla
+```
+Podemos guardar en formato amigable
+```{r}
+tablahtml = kable(tabla, format = "html", digits = 2) 
+kable_styling(tablahtml)
+```
+
+También podemos visualizar el agrupamiento de los distritos
+```{r}
+fviz_cluster(object = list(data=dist, cluster = sispol$clusterP),
+             geom = c("text"), 
+             ellipse.type = "convex")
+```
+
+Mejorar el gráfico
+```{r}
+fviz_cluster(object = list(data=dist, cluster = sispol$clusterP),
+             geom = c("text"), 
+             ellipse = FALSE,labelsize = 5)
+```
+
+Ahora hablaremos sobre la tolerancia política en el Perú. Nos interesa explorar especificamente la tolerancia política en el Perú
+```{r}
+cultura = import("C:/Users/Jair Alva/Desktop/Proyectos/Estadistica-II/Clase 4/Peru2019.dta")
+
+cultura = select(cultura, d1, d2, d3, d4)
+str(cultura)
+
+cultura[,] = lapply(cultura[], as.numeric)
+
+cultura[!complete.cases(cultura),]
+
+cultura = cultura[complete.cases(cultura),]
+```
+
+Calculamos la distancia entre cada unidad de análisis
+```{r}
+distA = daisy(cultura, metric = "gower")
+
+```
+
+Proponemos una cantidad "n" de grupos a formar
+```{r}
+gruposA = pam(distA, 2, cluster.only = T)
+
+cultura$clusterP = gruposA
+```
+
+Podemos explorar los resultados
+```{r}
+aggregate(as.matrix(cbind(cultura[,c(1:4)]))~ clusterP, data=cultura,
+          FUN=plyr::each(MD = median, Media = mean))
+
+#Opcional, para recordar las clases de Estadísitca I
+describeBy(as.matrix(cbind(cultura[,c(1:4)])), group=cultura$clusterP, digits = 2)
+
+#Guardamos la visualización en un data.frame
+tablaA = aggregate(as.matrix(cbind(cultura[,c(1:4)]))~ clusterP, data=cultura,
+          FUN=plyr::each(MD = median, Media = mean))
+
+tablaA = t(as.data.frame(tablaA))
+tablaA
+```
+Podemos guardar en formato amigable
+```{r}
+tablahtml = kable(tablaA, format = "html", digits = 2) 
+kable_styling(tablahtml)
+```
+
+También podemos visualizar el agrupamiento de los distritos
+```{r}
+fviz_cluster(object = list(data=distA, cluster = cultura$clusterP),
+             geom = c("text"), 
+             ellipse.type = "convex")
+```
+
+Mejorar el gráfico
+```{r}
+fviz_cluster(object = list(data=distA, cluster = cultura$clusterP),
+             geom = c("text"), 
+             ellipse = FALSE,labelsize = 5)
+```
