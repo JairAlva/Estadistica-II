@@ -1,0 +1,164 @@
+"","Continent_Name","Entity","terrorist_incidents","terrorist_injuries","terrorist_fatalities"
+"1","Asia","Afghanistan",2024,4789,4200
+"2","Europe","Albania",54,20,6
+"3","Africa","Algeria",319,1890,1302
+"4","Africa","Angola",73,216,358
+"5","South America","Argentina",267,516,175
+"6","Europe","Armenia",8,1,2
+"7","Asia","Armenia",8,1,2
+"8","Oceania","Australia",33,11,9
+"9","Europe","Austria",62,117,17
+"10","Asia","Azerbaijan",9,68,26
+"11","Europe","Azerbaijan",9,68,26
+"12","North America","Bahamas",2,0,1
+"13","Asia","Bahrain",18,11,13
+"14","Asia","Bangladesh",155,2208,231
+"15","North America","Barbados",2,0,73
+"16","Europe","Belarus",2,0,0
+"17","Europe","Belgium",0,0,0
+"18","North America","Belize",1,0,0
+"19","Africa","Benin",1,3,0
+"20","Asia","Bhutan",12,3,0
+"21","South America","Bolivia",79,41,10
+"22","Europe","Bosnia and Herzegovina",114,39,18
+"23","Africa","Botswana",3,0,2
+"24","South America","Brazil",53,50,10
+"25","Europe","Bulgaria",12,0,2
+"26","Africa","Burundi",14,29,27
+"27","Asia","Cambodia",60,188,77
+"28","North America","Canada",34,51,338
+"29","Africa","Central African Republic",1,7,0
+"30","Africa","Chad",12,25,180
+"31","South America","Chile",0,0,0
+"32","Asia","China",28,172,100
+"33","South America","Colombia",1913,2748,1615
+"34","Africa","Congo",2,1,1
+"35","Africa","Congo",2,1,1
+"36","North America","Costa Rica",0,0,0
+"37","Africa","Cote d'Ivoire",3,0,3
+"38","Europe","Croatia",23,41,2
+"39","North America","Cuba",19,4,2
+"40","Asia","Cyprus",72,67,25
+"41","Europe","Cyprus",72,67,25
+"42","Europe","Czech Republic",5,4,0
+"43","Europe","Denmark",29,60,1
+"44","Africa","Djibouti",4,66,12
+"45","North America","Dominican Republic",27,3,2
+"46","South America","Ecuador",77,50,27
+"47","Africa","Egypt",133,856,331
+"48","North America","El Salvador",118,68,65
+"49","Africa","Eritrea",5,63,16
+"50","Europe","Estonia",7,4,0
+"51","Africa","Ethiopia",85,371,215
+"52","Oceania","Fiji",2,0,0
+"53","Europe","Finland",1,0,0
+"54","Europe","France",1223,1372,185
+"55","Oceania","French Polynesia",2,0,1
+"56","Africa","Gabon",1,0,2
+"57","Europe","Georgia",99,216,79
+"58","Asia","Georgia",99,216,79
+"59","Europe","Germany",27,15,1
+"60","Africa","Ghana",1,0,0
+"61","Europe","Gibraltar",2,0,3
+"62","Europe","Greece",730,524,150
+"63","North America","Grenada",1,1,0
+"64","North America","Guadeloupe",2,2,0
+"65","North America","Guatemala",110,37,94
+"66","Africa","Guinea",1,0,0
+"67","South America","Guyana",5,5,4
+"68","North America","Haiti",23,29,5
+"69","North America","Honduras",73,69,37
+"70","Asia","Hong Kong",1,1,0
+"71","Europe","Hungary",12,11,0
+"72","Europe","Iceland",1,0,0
+"73","Asia","India",0,0,0
+"74","Asia","Indonesia",243,1504,472
+"75","Asia","Iran",148,415,103
+"76","Asia","Iraq",10763,53590,28971
+"77","Europe","Ireland",26,10,8
+"78","Asia","Israel",1687,7581,1484
+"79","Europe","Italy",434,427,86
+"80","North America","Jamaica",8,0,0
+"81","Asia","Japan",85,5107,19
+"82","Asia","Jordan",87,145,93
+"83","Europe","Kazakhstan",7,13,2
+"84","Asia","Kazakhstan",7,13,2
+"85","Africa","Kenya",12,5196,243
+"86","Asia","Kuwait",45,190,34
+"87","Europe","Latvia",9,35,1
+"88","Asia","Lebanon",676,2192,1302
+"89","Africa","Lesotho",2,0,2
+"90","Africa","Liberia",8,1,11
+"91","Europe","Lithuania",6,6,0
+"92","Europe","Luxembourg",5,0,0
+"93","Europe","Macedonia",67,40,10
+"94","Africa","Madagascar",7,37,0
+"95","Asia","Malaysia",14,11,110
+"96","Asia","Maldives",1,3,0
+"97","Africa","Mali",2,0,0
+"98","Europe","Malta",12,9,2
+"99","North America","Martinique",1,0,0
+"100","Africa","Mauritania",9,0,40
+"101","North America","Mexico",81,27,20
+"102","Europe","Moldova",6,25,10
+"103","Asia","Mongolia",1,0,1
+"104","Europe","Montenegro",13,0,1
+"105","Africa","Morocco",28,11,48
+"106","Africa","Mozambique",36,15,37
+"107","Asia","Myanmar",50,309,81
+"108","Africa","Namibia",3,35,18
+"109","Asia","Nepal",493,625,212
+"110","Europe","Netherlands",76,46,27
+"111","Oceania","New Zealand",5,0,1
+"112","North America","Nicaragua",46,83,26
+"113","Africa","Niger",1,0,0
+"114","Africa","Nigeria",74,43,40
+"115","Europe","Norway",11,5,1
+"116","Asia","Pakistan",0,0,0
+"117","North America","Panama",23,30,25
+"118","Oceania","Papua New Guinea",5,3,1
+"119","South America","Paraguay",11,1,5
+"120","South America","Peru",371,390,210
+"121","Asia","Philippines",593,2560,765
+"122","Europe","Poland",14,8,3
+"123","Europe","Portugal",0,0,0
+"124","North America","Puerto Rico",21,4,2
+"125","Asia","Qatar",2,17,2
+"126","Europe","Romania",5,2,5
+"127","Africa","Rwanda",5,7,12
+"128","Asia","Saudi Arabia",0,0,0
+"129","Africa","Senegal",2,0,0
+"130","Europe","Serbia",73,29,10
+"131","Africa","Sierra Leone",20,1,20
+"132","Asia","Singapore",5,0,0
+"133","Europe","Slovenia",1,0,0
+"134","Africa","Somalia",371,826,602
+"135","Africa","South Africa",58,194,12
+"136","Europe","Spain",1428,1567,297
+"137","Asia","Sri Lanka",350,4212,1096
+"138","Africa","Sudan",0,0,0
+"139","South America","Suriname",6,0,1
+"140","Africa","Swaziland",4,10,6
+"141","Europe","Sweden",45,11,34
+"142","Europe","Switzerland",84,66,53
+"143","Asia","Taiwan",4,5,25
+"144","Asia","Tajikistan",59,82,58
+"145","Africa","Tanzania",9,78,11
+"146","Asia","Thailand",2009,3371,1442
+"147","Africa","Togo",3,6,0
+"148","North America","Trinidad and Tobago",2,12,0
+"149","Africa","Tunisia",0,0,0
+"150","Asia","Turkey",1279,2541,605
+"151","Europe","Turkey",1279,2541,605
+"152","Asia","Turkmenistan",1,1,1
+"153","Africa","Uganda",63,467,549
+"154","Europe","Ukraine",26,28,4
+"155","Asia","United Arab Emirates",10,4,8
+"156","South America","Uruguay",26,3,1
+"157","Asia","Uzbekistan",16,168,40
+"158","South America","Venezuela",162,72,48
+"159","Asia","Vietnam",3,132,1
+"160","Africa","Western Sahara",3,3,9
+"161","Asia","Yemen",136,328,138
+"162","Africa","Zambia",9,34,10
+"163","Africa","Zimbabwe",28,108,78
